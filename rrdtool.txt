@@ -1,0 +1,42 @@
+wget "http://packages.express.org/rrdtool/rrdtool-1.4.5-1.fc15.wrl.i386.rpm"
+wget "http://packages.express.org/rrdtool/rrdtool-python-1.4.5-1.fc15.wrl.i386.rpm"
+rpm2cpio rrdtool-1.4.5-1.fc15.wrl.i386.rpm | cpio -idv
+rpm2cpio rrdtool-python-1.4.5-1.fc15.wrl.i386.rpm | cpio -idv
+export LD_LIBRARY_PATH=~/usr/lib/
+ldd usr/lib/python2.7/site-packages/rrdtoolmodule.so
+wget "http://mirror.netcologne.de/fedora/linux/releases/15/Everything/i386/os/Packages/libpng-1.2.44-3.fc15.i686.rpm"
+wget "http://mirror.netcologne.de/fedora/linux/releases/15/Everything/i386/os/Packages/pango-1.28.4-1.fc15.i686.rpm"
+wget "http://mirror.netcologne.de/fedora/linux/releases/15/Everything/i386/os/Packages/cairo-1.10.2-3.fc15.i686.rpm"
+rpm2cpio libpng-1.2.44-3.fc15.i686.rpm | cpio -idv
+rpm2cpio pango-1.28.4-1.fc15.i686.rpm | cpio -idv
+rpm2cpio cairo-1.10.2-3.fc15.i686.rpm | cpio -idv
+ldd usr/lib/python2.7/site-packages/rrdtoolmodule.so
+wget "http://mirror.netcologne.de/fedora/linux/releases/15/Everything/i386/os/Packages/fontconfig-2.8.0-3.fc15.i686.rpm"
+wget "http://mirror.netcologne.de/fedora/linux/releases/15/Everything/i386/os/Packages/pixman-0.20.2-2.fc15.i686.rpm"
+wget "http://mirror.netcologne.de/fedora/linux/releases/15/Everything/i386/os/Packages/libXrender-0.9.6-2.fc15.i686.rpm"
+wget "http://mirror.netcologne.de/fedora/linux/releases/15/Everything/i386/os/Packages/libX11-1.4.3-1.fc15.i686.rpm"
+rpm2cpio fontconfig-2.8.0-3.fc15.i686.rpm | cpio -idv
+rpm2cpio pixman-0.20.2-2.fc15.i686.rpm | cpio -idv
+rpm2cpio libXrender-0.9.6-2.fc15.i686.rpm | cpio -idv
+rpm2cpio libX11-1.4.3-1.fc15.i686.rpm | cpio -idv
+ldd usr/lib/python2.7/site-packages/rrdtoolmodule.so
+wget "http://mirror.netcologne.de/fedora/linux/releases/15/Everything/i386/os/Packages/libxcb-1.7-2.fc15.i686.rpm"
+rpm2cpio libxcb-1.7-2.fc15.i686.rpm | cpio -idv
+ldd usr/lib/python2.7/site-packages/rrdtoolmodule.so
+wget "http://mirror.netcologne.de/fedora/linux/releases/15/Everything/i386/os/Packages/libXau-1.0.6-2.fc15.i686.rpm"
+rpm2cpio libXau-1.0.6-2.fc15.i686.rpm | cpio -idv
+ldd usr/lib/python2.7/site-packages/rrdtoolmodule.so
+cd usr/lib/python2.7/site-packages/
+mkdir rpm
+mv *.rpm rpm/
+mkdir chart
+cd chart
+# ~/usr/bin/rrdtool create chart.rrd --step 60 DS:average:GAUGE:60:0:100 DS:maximum:GAUGE:60:0:100 RRA:AVERAGE:0.5:1:600 RRA:LAST:0.5:1:600 RRA:MIN:0.5:1:600 RRA:MAX:0.5:1:600
+# while true; do ~/usr/bin/rrdtool update chart.rrd "$(date +%s):$(($RANDOM%61)):$(($RANDOM%101))"; sleep 10; done
+# while true; do clear; python chart.py; sleep 20; done
+wget "http://mirror.netcologne.de/fedora/linux/releases/15/Everything/i386/os/Packages/collectd-4.10.3-2.fc15.i686.rpm"
+wget "http://mirror.netcologne.de/fedora/linux/releases/15/Everything/i386/os/Packages/collectd-rrdtool-4.10.3-2.fc15.i686.rpm"
+rpm2cpio collectd-4.10.3-2.fc15.i686.rpm | cpio -idv
+rpm2cpio collectd-rrdtool-4.10.3-2.fc15.i686.rpm | cpio -idv
+# configure etc/collectd.conf
+~/usr/sbin/collectd -C etc/collectd.conf -P var/run/collectd.pid
